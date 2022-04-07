@@ -5,8 +5,9 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 // import Ionicons from 'react-native-vector-icons/Ionicons';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import HomeScreen from './src/screens/Home';
-import SearchScreen from './src/screens/Search';
+// import SearchScreen from './src/screens/Search';
 import VideoScreen from './src/screens/Videos';
+import StackNavigator from './src/components/StackNavigator';
 
 const Tab = createBottomTabNavigator();
 
@@ -34,8 +35,8 @@ export default function App() {
         tabBarInactiveTintColor: 'gray',
       })} >
         <Tab.Screen name="Home" component={HomeScreen} options={{ headerShown: false }} />
-        <Tab.Screen name="Search" component={SearchScreen} options={{ headerShown: false }} />
-        <Tab.Screen name="Videos" component={VideoScreen} options={{ headerShown: false }} />
+        <Tab.Screen name="Search" component={StackNavigator} options={{ headerShown: false }} />
+        {/* <Tab.Screen name="Videos" component={VideoScreen} options={{ headerShown: false }} /> */}
       </Tab.Navigator>
     </NavigationContainer>
   );
