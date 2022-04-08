@@ -67,7 +67,7 @@ module.exports = (sequelize, DataTypes) => {
       }
     },
     GenreId: DataTypes.INTEGER,
-    UserId: DataTypes.INTEGER
+    UserId: DataTypes.STRING
   }, {
     sequelize,
     modelName: 'Movie',

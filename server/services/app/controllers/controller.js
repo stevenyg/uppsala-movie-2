@@ -108,9 +108,9 @@ class Controller {
         const t = await sequelize.transaction();
         try {
             const { id } = req.params
-            const { idcast1, idcast2, idcast3 } = req.query
+            const { idcast1, idcast2, idcast3, UserId } = req.query
             const { title, synopsis, trailerUrl, rating, imageUrl, GenreId, name1, profilePicture1, name2, profilePicture2, name3, profilePicture3 } = req.body
-            const { UserId } = req.query
+
             const slug = title.split(' ').join('-')
 
             const movieCheck = await Movie.findByPk(id)
