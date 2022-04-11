@@ -4,7 +4,7 @@ WORKDIR /app
 
 ENV PORT=4001
 
-COPY package.json package-lock.json /app
+COPY package.json package-lock.json /app/
 
 RUN npm install && npm cache clean --force
 
