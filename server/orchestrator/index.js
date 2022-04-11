@@ -1,6 +1,6 @@
 const { ApolloServer, gql } = require('apollo-server');
 const { default: axios } = require('axios');
-const PORT = 4000
+const PORT = process.env.PORT || 4000
 // A schema is a collection of type definitions (hence "typeDefs")
 // that together define the "shape" of queries that are executed against
 // your data.
