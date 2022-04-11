@@ -3,59 +3,69 @@ import { StatusBar } from 'expo-status-bar';
 import { VStack, Box, Text, Heading, Input, Divider, Icon, Center, Pressable, NativeBaseProvider, ScrollView, AspectRatio, Image, HStack, Stack } from 'native-base';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { useEffect, useState } from 'react';
+import { GET_SEARCHMOVIES } from "../../config/queries"
+import { useQuery } from '@apollo/client';
+import debounce from 'lodash.debounce';
 
 function SearchScreen({ navigation }) {
     // const input = 'man'
     const [input, setInput] = useState({
         search: ''
-    })
+    });
 
-    const [movies, setMovies] = useState([])
-
-    useEffect(() => {
-        const delayDebounceFn = setTimeout(() => {
-            fetch(`https://radiant-meadow-06105.herokuapp.com/user/search/?search=${input.search}`)
-                .then(response => {
-                    if (!response.ok) {
-                        throw Error(response.statusText);
-                    } else {
-                        return response.json()
-                    }
-                })
-                .then(data => {
-                    // console.log('Success:', data);
-                    // console.log(input);
-                    setMovies(data)
-                })
-                .catch((error) => {
-                    console.error('Error:', error);
-                });
-            // Send Axios request here
-        }, 3000)
-        return () => clearTimeout(delayDebounceFn)
-    }, [input])
-
-
+    const { loading, error, data, refetch } = useQuery(GET_SEARCHMOVIES, {
+        variables: {
+            search: ''
+        },
+    });
 
     useEffect(() => {
-        fetch(`https://radiant-meadow-06105.herokuapp.com/user/search/?search=${input}`)
-            .then(response => {
-                if (!response.ok) {
-                    throw Error(response.statusText);
-                } else {
-                    return response.json()
-                }
-            })
-            .then(data => {
-                console.log('Success:');
-                setMovies(data)
-            })
-            .catch((error) => {
-                console.error('Error:', error);
-            });
-    }, [])
+        refetch({ search: input.search })
+    }, [input.search])
 
-    // const cearchHandler = () => {
+    const changeText = (value) => {
+        setInput({
+            ...input,
+            search: value
+        })
+        console.log(value);
+    }
+
+    const debounceChangeText = debounce(changeText, 2000)
+
+
+    if (loading) return null;
+    if (error) return null;
+
+
+    // const [movies, setMovies] = useState([])
+
+    // useEffect(() => {
+    //     const delayDebounceFn = setTimeout(() => {
+    //         fetch(`https://radiant-meadow-06105.herokuapp.com/user/search/?search=${input.search}`)
+    //             .then(response => {
+    //                 if (!response.ok) {
+    //                     throw Error(response.statusText);
+    //                 } else {
+    //                     return response.json()
+    //                 }
+    //             })
+    //             .then(data => {
+    //                 // console.log('Success:', data);
+    //                 // console.log(input);
+    //                 setMovies(data)
+    //             })
+    //             .catch((error) => {
+    //                 console.error('Error:', error);
+    //             });
+    //         // Send Axios request here
+    //     }, 3000)
+    //     return () => clearTimeout(delayDebounceFn)
+    // }, [input])
+
+
+
+    // useEffect(() => {
     //     fetch(`https://radiant-meadow-06105.herokuapp.com/user/search/?search=${input}`)
     //         .then(response => {
     //             if (!response.ok) {
@@ -71,17 +81,14 @@ function SearchScreen({ navigation }) {
     //         .catch((error) => {
     //             console.error('Error:', error);
     //         });
-    // }
+    // }, [])
 
     return (
         <NativeBaseProvider >
             <VStack w="100%" p="5" space={5} alignSelf="center" safeArea>
-                {/* <Heading fontSize="lg">Cupertino</Heading> */}
+
                 <Input placeholder="Search" fontSize="xl" variant="filled" width="100%" borderRadius="5" py="3" px="2" borderWidth="1" InputLeftElement={<Icon ml="3" size="6" color="muted.500" as={<Ionicons name="ios-search" />} />}
-                    onChangeText={value => setInput({
-                        ...input,
-                        search: value
-                    })}
+                    onChangeText={debounceChangeText}
                 />
                 <Divider></Divider>
 
@@ -91,7 +98,7 @@ function SearchScreen({ navigation }) {
                     minW: "72",
                 }}>
                     {
-                        movies.map(movie => {
+                        data.movieSearch.map(movie => {
                             return <Box key={movie.id} alignItems="center" p="3">
                                 <Pressable onPress={() => navigation.navigate("Detail", {
                                     movie
@@ -156,8 +163,6 @@ function SearchScreen({ navigation }) {
                 </ScrollView>
 
             </VStack>
-
-            {/* </VStack>; */}
         </NativeBaseProvider >
 
     )
