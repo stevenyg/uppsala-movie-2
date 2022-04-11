@@ -10,8 +10,6 @@ const redis = new Redis();
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 
-// router.get('/user/movies/:slug/:id', Controller.getUserMoviesDetail)
-
 app.get('/user/search', async (req, res) => {
     try {
         const { search } = req.query
@@ -112,10 +110,67 @@ app.delete('/movies/:id', async (req, res) => {
 })
 
 
+// router.delete('/users/:id', userController.deleteUser)
 
+app.get('/users', async (req, res) => {
+    try {
+        const users = await redis.get('users')
 
+        if (users) {
+            const movies = JSON.parse(users)
+            res.status(200).json(movies)
+        } else {
+            const { data } = await axios.get('http://localhost:4001/users')
+            await redis.set('users', JSON.stringify(data))
+            res.status(200).json(data)
+        }
 
+    } catch (error) {
+        console.log(error);
+        res.status(500).json(error)
+    }
+})
 
+app.get('/users/:id', async (req, res) => {
+    try {
+
+        const userDetailCache = await redis.get(`user-${req.params.id}`)
+
+        if (userDetailCache) {
+            const user = JSON.parse(userDetailCache)
+            res.status(200).json(user)
+        } else {
+            const { data } = await axios.get(`http://localhost:4001/users/${req.params.id}`)
+            await redis.set(`user-${req.params.id}`, JSON.stringify(data))
+            res.status(200).json(data)
+        }
+    } catch (error) {
+        console.log(error);
+        res.status(500).json(error)
+    }
+})
+
+app.post('/users', async (req, res) => {
+    try {
+        const { data } = await axios.post(`http://localhost:4001/users`, req.body)
+
+        res.status(200).json(data)
+
+    } catch (error) {
+        console.log(error);
+        res.status(500).json(error)
+    }
+})
+
+app.delete('/users/:id', async (req, res) => {
+    try {
+        const { data } = await axios.delete(`http://localhost:4001/users/${req.params.id}`)
+        res.status(200).json(data)
+    } catch (error) {
+        console.log(error);
+        res.status(500).json(error)
+    }
+})
 
 app.listen(port, () => {
     console.log(`Example app listening on port ${port}`)

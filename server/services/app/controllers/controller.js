@@ -150,9 +150,11 @@ class Controller {
     static async getMovies(req, res, next) {
         try {
             const movies = await Movie.findAll({
-                include: {
+                include: [{
                     model: Cast
-                }
+                }, {
+                    model: Genre
+                }]
             })
 
             res.status(200).json(movies)

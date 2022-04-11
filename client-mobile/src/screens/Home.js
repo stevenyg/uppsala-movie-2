@@ -7,7 +7,7 @@ function HomeScreen() {
         <NativeBaseProvider >
             <VStack space={4} alignItems="center" safeArea>
                 <Center>
-                    <ScrollView maxW="700" h="80" _contentContainerStyle={{
+                    <ScrollView maxW="500" h="80" _contentContainerStyle={{
 
                         mb: "4",
                         minW: "72"
