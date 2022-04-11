@@ -66,23 +66,23 @@ const typeDefs = gql`
 const resolvers = {
     Query: {
         movies: async () => {
-            const { data: movies } = await axios.get("http://localhost:4002/movies")
+            const { data: movies } = await axios.get("https://uppsala-p3c2-app.herokuapp.com/movies")
             return movies
         },
         movieSearch: async (parents, args) => {
-            const { data: movies } = await axios.get(`http://localhost:4002/user/search/?search=${args.search}`)
+            const { data: movies } = await axios.get(`https://uppsala-p3c2-app.herokuapp.com/user/search/?search=${args.search}`)
             return movies
         },
         movieDetail: async (parents, args) => {
-            const { data: movies } = await axios.get(`http://localhost:4002/user/movies/${args.slug}/${args.id}`)
+            const { data: movies } = await axios.get(`https://uppsala-p3c2-app.herokuapp.com/user/movies/${args.slug}/${args.id}`)
             return movies
         },
         users: async () => {
-            const { data: users } = await axios.get("http://localhost:4001/users")
+            const { data: users } = await axios.get("https://uppsala-p3c2.herokuapp.com/users")
             return users
         },
         user: async (parents, args) => {
-            const { data: user } = await axios.get(`http://localhost:4001/users/${args.id}`)
+            const { data: user } = await axios.get(`https://uppsala-p3c2.herokuapp.com/users/${args.id}`)
             return user
         },
     },
@@ -91,7 +91,7 @@ const resolvers = {
             try {
                 const { data } = await axios({
                     method: 'POST',
-                    url: `http://localhost:4001/users`,
+                    url: `https://uppsala-p3c2.herokuapp.com/users`,
                     data: {
                         email: args.email,
                         password: args.password,
@@ -108,7 +108,7 @@ const resolvers = {
             try {
                 const { data } = await axios({
                     method: 'DELETE',
-                    url: `http://localhost:4001/users/${args.id}`
+                    url: `https://uppsala-p3c2.herokuapp.com/users/${args.id}`
                 })
                 return data
             } catch (error) {
@@ -119,7 +119,7 @@ const resolvers = {
             try {
                 const { data } = await axios({
                     method: 'POST',
-                    url: `http://localhost:4002/movies/?UserId=${args.UserId}`,
+                    url: `https://uppsala-p3c2-app.herokuapp.com/movies/?UserId=${args.UserId}`,
                     data: {
                         title: args.title, synopsis: args.synopsis, trailerUrl: args.trailerUrl, rating: args.rating, imageUrl: args.imageUrl, GenreId: args.GenreId, name1: args.name1, profilePicture1: args.profilePicture1, name2: args.name2, profilePicture2: args.profilePicture2, name3: args.name3, profilePicture3: args.profilePicture3
                     }
@@ -133,7 +133,7 @@ const resolvers = {
             try {
                 const { data } = await axios({
                     method: 'PUT',
-                    url: `http://localhost:4002/movies/${args.id}?idcast1=${args.idcast1}&idcast2=${args.idcast2}&idcast3=${args.idcast3}&UserId=${args.UserId}`,
+                    url: `https://uppsala-p3c2-app.herokuapp.com/movies/${args.id}?idcast1=${args.idcast1}&idcast2=${args.idcast2}&idcast3=${args.idcast3}&UserId=${args.UserId}`,
                     data: {
                         title: args.title, synopsis: args.synopsis, trailerUrl: args.trailerUrl, rating: args.rating, imageUrl: args.imageUrl, GenreId: args.GenreId, name1: args.name1, profilePicture1: args.profilePicture1, name2: args.name2, profilePicture2: args.profilePicture2, name3: args.name3, profilePicture3: args.profilePicture3
                     }
@@ -147,7 +147,7 @@ const resolvers = {
             try {
                 const { data } = await axios({
                     method: 'DELETE',
-                    url: `http://localhost:4002/movies/${args.id}`
+                    url: `https://uppsala-p3c2-app.herokuapp.com/movies/${args.id}`
                 })
                 return data
             } catch (error) {
